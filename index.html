@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scale - Close Books Faster</title>
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+    <style>
+        /* Import Comfortaa font */
+        @import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;500;600;700&display=swap');
+        
+        /* Reset and base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+        
+        body {
+            background-color: #000000;
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Layout */
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        header {
+            padding: 1rem 0;
+            margin-bottom: 2rem;
+        }
+        
+        .logo {
+            width: 180px;
+        }
+        
+        main {
+            display: flex;
+            flex: 1;
+            align-items: center;
+        }
+        
+        .content {
+            flex: 1;
+            max-width: 600px;
+        }
+        
+        .visual-elements {
+            flex: 1;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-gap: 2.5rem;
+            position: relative;
+            padding-left: 2rem;
+        }
+        
+        /* Typography */
+        h1 {
+            font-family: 'Comfortaa', cursive;
+            font-size: 4rem;
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 1rem;
+            letter-spacing: -0.5px;
+        }
+        
+        h1 .highlight {
+            color: #4de1d2; /* Teal/aqua color */
+        }
+        
+        p {
+            font-family: 'Comfortaa', cursive;
+            font-size: 1.25rem;
+            font-weight: 400;
+            line-height: 1.5;
+            margin-bottom: 2rem;
+            letter-spacing: 0.2px;
+        }
+        
+        /* Button */
+        .cta-button {
+            display: inline-block;
+            padding: 0.85rem 1.8rem;
+            border: 1px solid #ffffff;
+            border-radius: 4px;
+            color: #ffffff;
+            font-family: 'Comfortaa', cursive;
+            font-size: 1rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+        
+        .cta-button:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        /* Visual elements */
+        .icon-box {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        /* Animation Base Classes */
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(45deg); }
+            50% { transform: translateY(-8px) rotate(45deg); }
+            100% { transform: translateY(0px) rotate(45deg); }
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @keyframes shimmer {
+            0% { box-shadow: 0 0 5px rgba(77, 225, 210, 0.2); }
+            50% { box-shadow: 0 0 15px rgba(77, 225, 210, 0.6); }
+            100% { box-shadow: 0 0 5px rgba(77, 225, 210, 0.2); }
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .diamond {
+            width: 100px;
+            height: 100px;
+            background-color: #173532; /* Dark teal background */
+            transform: rotate(45deg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .circle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+        
+        .circle.blue {
+            background-color: rgba(75, 158, 255, 0.2);
+            border: 2px solid #4b9eff;
+            animation: pulse 4s ease-in-out infinite;
+        }
+        
+        .circle.gold {
+            background: #bf9b30;
+            position: relative;
+            overflow: hidden;
+            animation: shimmer 3s infinite;
+        }
+        
+        .circle.gold::after {
+            content: '';
+            position: absolute;
+            width: 50%;
+            height: 50%;
+            background-color: #000;
+            right: 0;
+            top: 0;
+            border-radius: 0 0 0 100%;
+            animation: rotate 8s linear infinite;
+        }
+        
+        /* SVG icons */
+        .icon {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .icon svg {
+            width: 32px;
+            height: 32px;
+            animation: pulse 3s ease-in-out infinite;
+        }
+        
+        .diamond .icon {
+            transform: rotate(-45deg);
+        }
+        
+        .circle .icon {
+            transform: none;
+        }
+        
+        /* Financial elements */
+        .dollar-container {
+            width: 80px;
+            height: 80px;
+            background-color: rgba(77, 225, 210, 0.1);
+            border: 2px solid #4de1d2;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            animation: shimmer 4s infinite;
+        }
+        
+        .dollar-sign {
+            font-size: 36px;
+            font-weight: 700;
+            color: #4de1d2;
+            animation: bounce 3s ease-in-out infinite;
+        }
+        
+        /* Credit card */
+        .credit-card-container {
+            width: 80px;
+            height: 80px;
+            background-color: rgba(75, 158, 255, 0.1);
+            border: 2px solid #4b9eff;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            animation: pulse 5s ease-in-out infinite;
+        }
+        
+        .credit-card {
+            width: 40px;
+            height: 28px;
+            background-color: #4b9eff;
+            border-radius: 4px;
+            position: relative;
+            animation: float 4s ease-in-out infinite;
+            transform: translateY(0) !important;
+        }
+        
+        .credit-card::before {
+            content: '';
+            position: absolute;
+            top: 6px;
+            left: 4px;
+            width: 32px;
+            height: 4px;
+            background-color: rgba(0, 0, 0, 0.3);
+            border-radius: 2px;
+        }
+        
+        /* Chart elements */
+        .chart-container {
+            width: 80px;
+            height: 80px;
+            background-color: rgba(191, 155, 48, 0.1);
+            border: 2px solid #bf9b30;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            animation: pulse 4s ease-in-out infinite;
+        }
+        
+        .chart-bars {
+            display: flex;
+            align-items: flex-end;
+            height: 40px;
+            width: 40px;
+        }
+        
+        @keyframes bar-grow {
+            0% { height: 5px; }
+            50% { height: var(--bar-height); }
+            100% { height: 5px; }
+        }
+        
+        .bar {
+            width: 8px;
+            background-color: #bf9b30;
+            margin-right: 4px;
+            border-radius: 2px 2px 0 0;
+            animation: bar-grow 3s ease-in-out infinite;
+            animation-delay: calc(var(--bar-delay) * 1s);
+        }
+        
+        .bar:last-child {
+            margin-right: 0;
+        }
+        
+        .bar-1 {
+            --bar-height: 15px;
+            --bar-delay: 0;
+        }
+        
+        .bar-2 {
+            --bar-height: 25px;
+            --bar-delay: 0.5;
+        }
+        
+        .bar-3 {
+            --bar-height: 20px;
+            --bar-delay: 1;
+        }
+        
+        .bar-4 {
+            --bar-height: 35px;
+            --bar-delay: 1.5;
+        }
+        
+        .money-bag {
+            width: 40px;
+            height: 40px;
+            position: relative;
+            animation: bounce 3s ease-in-out infinite;
+        }
+        
+        .money-bag::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 10px;
+            width: 20px;
+            height: 12px;
+            background-color: #bf9b30;
+            border-radius: 6px 6px 0 0;
+        }
+        
+        .money-bag::after {
+            content: '';
+            position: absolute;
+            top: 8px;
+            left: 5px;
+            width: 30px;
+            height: 32px;
+            background-color: #bf9b30;
+            border-radius: 15px;
+        }
+        
+        .money-symbol {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            font-size: 20px;
+            font-weight: bold;
+            color: #000;
+            z-index: 1;
+        }
+        
+        @keyframes wiggle {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-5deg); }
+            75% { transform: rotate(5deg); }
+        }
+        
+        .piggy-bank {
+            width: 40px;
+            height: 30px;
+            background-color: #bf9b30;
+            border-radius: 15px;
+            position: relative;
+            animation: wiggle 3s ease-in-out infinite;
+        }
+        
+        .piggy-bank::before {
+            content: '';
+            position: absolute;
+            width: 10px;
+            height: 15px;
+            background-color: #bf9b30;
+            border-radius: 5px 5px 0 0;
+            right: -5px;
+            top: 5px;
+            transform: rotate(-30deg);
+        }
+        
+        .piggy-bank::after {
+            content: '';
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background-color: #000;
+            border-radius: 50%;
+            left: 8px;
+            top: 10px;
+        }
+        
+        .piggy-slot {
+            position: absolute;
+            width: 10px;
+            height: 2px;
+            background-color: #000;
+            top: 5px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 1rem 0;
+            color: #666;
+            font-size: 0.875rem;
+        }
+
+        /* Staggered animation for entire grid */
+        .visual-elements .icon-box:nth-child(1) { animation-delay: 0.1s; }
+        .visual-elements .icon-box:nth-child(2) { animation-delay: 0.2s; }
+        .visual-elements .icon-box:nth-child(3) { animation-delay: 0.3s; }
+        .visual-elements .icon-box:nth-child(4) { animation-delay: 0.4s; }
+        .visual-elements .icon-box:nth-child(5) { animation-delay: 0.5s; }
+        .visual-elements .icon-box:nth-child(6) { animation-delay: 0.6s; }
+        .visual-elements .icon-box:nth-child(7) { animation-delay: 0.7s; }
+        .visual-elements .icon-box:nth-child(8) { animation-delay: 0.8s; }
+        .visual-elements .icon-box:nth-child(9) { animation-delay: 0.9s; }
+        
+        /* Responsive adjustments */
+        @media (max-width: 992px) {
+            main {
+                flex-direction: column;
+            }
+            
+            .content {
+                max-width: 100%;
+                margin-bottom: 3rem;
+                text-align: center;
+            }
+            
+            .visual-elements {
+                padding-left: 0;
+            }
+            
+            h1 {
+                font-size: 3rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .visual-elements {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .visual-elements {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <img src="assets/images/logo.svg" alt="Scale Logo" class="logo">
+        </header>
+        
+        <main>
+            <div class="content">
+                <h1>Close Books <span class="highlight">Faster</span>, at Scale</h1>
+                <p>Automated Close Management for Accountants | Works with QuickBooks, Xero & More</p>
+                <a href="https://docs.google.com/forms/d/1a3uhiI68s41fHOehZnqj6l_frgRvwo5bblZs5BJhimY/" class="cta-button">Join Waitlist</a>
+            </div>
+            
+            <div class="visual-elements">
+                <!-- Top row -->
+                <div class="icon-box">
+                    <div class="diamond">
+                        <div class="icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="#4de1d2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                <div class="icon-box">
+                    <div class="circle blue">
+                        <div class="icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="#4b9eff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                                <path d="M12 7V5"></path>
+                                <path d="M12 19v-2"></path>
+                                <path d="M5 12H7"></path>
+                                <path d="M17 12h2"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                <div class="icon-box">
+                    <div class="diamond">
+                        <div class="icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="#4de1d2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                                <line x1="8" y1="21" x2="16" y2="21"></line>
+                                <line x1="12" y1="17" x2="12" y2="21"></line>
+                                <path d="M6 8h.01M6 12h.01M6 16h.01M10 8h.01M10 12h.01M10 16h.01M14 8h.01M14 12h.01M14 16h.01M18 8h.01M18 12h.01M18 16h.01"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Middle row -->
+                <div class="icon-box">
+                    <div class="dollar-container">
+                        <div class="dollar-sign">$</div>
+                    </div>
+                </div>
+                <div class="icon-box">
+                    <div class="circle gold">
+                        <!-- Gold circle with pie chart effect -->
+                    </div>
+                </div>
+                <div class="icon-box">
+                    <div class="credit-card-container">
+                        <div class="credit-card"></div>
+                    </div>
+                </div>
+                
+                <!-- Bottom row -->
+                <div class="icon-box">
+                    <div class="chart-container">
+                        <div class="chart-bars">
+                            <div class="bar bar-1"></div>
+                            <div class="bar bar-2"></div>
+                            <div class="bar bar-3"></div>
+                            <div class="bar bar-4"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="icon-box">
+                    <div class="chart-container">
+                        <div class="money-bag">
+                            <span class="money-symbol">$</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="icon-box">
+                    <div class="chart-container">
+                        <div class="piggy-bank">
+                            <div class="piggy-slot"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <footer>
+        &copy; 2025 Scale. All rights reserved.
+    </footer>
+</body>
+</html>
